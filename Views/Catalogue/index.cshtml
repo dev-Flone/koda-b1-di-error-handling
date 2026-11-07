@@ -1,0 +1,144 @@
+@using System.Globalization
+@model IReadOnlyList<KodaStore.Api.DTOs.ProductResponse>
+
+@{
+    Layout = null;
+    ViewData["Title"] = "Catalogue Page";
+    var rupiah = CultureInfo.GetCultureInfo("id-ID");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData</title>
+    <link rel="stylesheet" href="~/styles/Catalogue.css" asp-append-version="true">
+</head>
+
+<body>
+    <div class="table-container">
+        <button class="add-button" onclick="addProduct()">+ Add Product</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>Product Code</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6">There is no Product yet.</td>
+                    </tr>
+                }
+                else
+                {
+                    @foreach (var p in Model)
+                    {
+                        <tr>
+                            <td>@p.ProductCode</td>
+                            <td>@p.Name</td>
+                            <td>@p.Category</td>
+                            <td>@p.Stock</td>
+                            <td>@p.Price.ToString("C0", rupiah)</td>
+                            <td class="action-button">
+                                <button class="edit-button" onclick="editProduct('@p.ProductCode')">Edit</button>
+                                <button class="delete-button" onclick="deleteProduct('@p.ProductCode')">Delete</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>
+
+<script>
+    const API_URL = '/api/v1/products';
+
+    // 1. ADD PRODUCT (POST)
+    async function addProduct() {
+        const payload = {
+            productCode: "PR001",
+            name: "Keyboard",
+            price: 30000,
+            stock: 15,
+            category: "Elektronik"
+        };
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                window.location.reload(); // Refresh to show new data
+            } else {
+                alert('Conflict or error adding product.');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // 2. DELETE PRODUCT (DELETE)
+    async function deleteProduct(productCode) {
+        try {
+            const response = await fetch(`${API_URL}/${productCode}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok || response.status === 24) { // Handles 204 NoContent
+                window.location.reload();
+            } else {
+                alert('Failed to delete product.');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    // 3. EDIT PRODUCT (PUT)
+    async function editProduct(productCode) {
+        // Hardcoded update payload as an example
+        const payload = {
+            name: "Keyboard Mechanical",
+            price: 45000,
+            stock: 10,
+            category: "Elektronik"
+        };
+
+        try {
+            const response = await fetch(`${API_URL}/${productCode}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                alert('Failed to update product.');
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+</script>

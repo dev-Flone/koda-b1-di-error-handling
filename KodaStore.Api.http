@@ -1,0 +1,143 @@
+@url = http://localhost:5188
+
+GET {{url}}/weatherforecast/
+Accept: application/json
+
+###
+GET {{url}}/api/v1/products
+Accept: application/json
+
+###
+GET {{url}}/api/v1/customers
+Accept: application/json
+
+###
+GET {{url}}/api/v1/products/PR001
+Accept: application/json
+
+###
+GET {{url}}/api/v1/customers/14
+Accept: application/json
+
+###
+POST {{url}}/api/v1/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Andi",
+    "email": "andi@gmail.com",
+    "phone": "08123456789",
+    "address": "Solo"
+}
+###
+POST {{url}}/api/v1/customers
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Budi",
+    "email": "budi@gmail.com",
+    "phone": "08123787124",
+    "address": "Semarang"
+}
+
+###
+POST {{url}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+    "customerId": 14,
+    "productCode": "PR001",
+    "name": "Keyboard",
+    "price": 30000,
+    "stock": 15,
+    "category": "Elektronik"
+}
+###
+POST {{url}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+    "customerId": 15,
+    "productCode": "PR003",
+    "name": "Monitor",
+    "price": 1400000,
+    "stock": 4,
+    "category": "Elektronik"
+}
+
+###
+POST {{url}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+    "customerId": 14,
+    "productCode": "PR002",
+    "name": "Mouse",
+    "price": 25000,
+    "stock": 20,
+    "category": "Elektronik"
+}
+
+###
+POST {{url}}/api/v1/products
+Accept: application/json
+Content-Type: application/json
+
+{
+    "customerId": 2147483647,
+    "productCode": "PR-NO-CUSTOMER",
+    "name": "Invalid customer test",
+    "price": 1000,
+    "stock": 1,
+    "category": "Test"
+}
+
+### Upload Gambar
+POST {{url}}/api/v1/products/PR001/image
+Content-Type: multipart/form-data; boundary=KodaStore
+
+--KodaStore
+Content-Disposition: form-data; name="file"; filename="background.jpg"
+Content-Type: image/jpeg
+
+< "C:\Users\Flone\Pictures\background.jpg"
+--KodaStore--
+
+
+###
+DELETE {{url}}/api/v1/products/PR002
+Accept: application/json
+
+###
+DELETE {{url}}/api/v1/customers/1
+Accept: application/json
+
+###
+PUT {{url}}/api/v1/products/PR002
+Accept: application/json
+Content-Type: application/json
+
+{
+    "customerId": 1,
+    "name": "Mouse",
+    "price": 25000,
+    "stock": 20,
+    "category": "Aksesoris"
+}
+
+###
+PUT {{url}}/api/v1/customers/2
+Accept: application/json
+Content-Type: application/json
+
+{
+    "name": "Budi",
+    "email": "budi@gmail.com",
+    "phone": "08145678902",
+    "address": "Demak"
+}
